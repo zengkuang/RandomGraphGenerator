@@ -1,3 +1,3 @@
 # RandomGraphGenerator
 
-This is graph generator for IIMP6010.
+This is a random graph generator for IIMP6010.
