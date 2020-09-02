@@ -107,8 +107,8 @@ shortest_node = {}
 #edge_colors = [e[2]['attr_dict']['color'] for e in g.edges(data=True)]  
 edge_colors = [e[2]['color'] for e in g.edges(data=True)]  
 labels = nx.get_node_attributes(g,'height')
-
-nx.draw(g, pos=node_positions, edge_color=edge_colors,node_size=10, node_color='black')
+nx.draw_networkx_nodes(g, pos=node_positions,node_size=10, node_color='black')
+nx.draw_networkx_edges(g, pos=node_positions,edge_color='blue',alpha=0.1)
 nx.draw_networkx_labels(g,pos=node_positions,labels=labels,font_size=12,font_color='blue')
 #nx.draw(g, labels = labels)
 #nx.draw_networkx_edges(g, pos=node_positions,edgelist = shortest_path_list[0:1], edge_color= 'r')
