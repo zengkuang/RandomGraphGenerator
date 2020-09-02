@@ -5,12 +5,7 @@ Created on Wed Sep  2 10:32:36 2020
 @author: terry
 """
 
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Aug 19 11:16:59 2020
 
-@author: terry
-"""
 import random
 from copy import deepcopy
 import networkx as nx
@@ -22,13 +17,13 @@ import matplotlib.patches as patches
 node_prob = 0.2
 building_prob = 0.2
 
-edgelist = pd.read_csv('edge.csv')
+edgelist = pd.read_csv('edge_standard.csv')
 nodelist = pd.read_csv('nodes.csv')
 
 g = nx.Graph()
 
 for i,element in edgelist.iterrows():
-    g.add_edge(element[0],element[1], weight=random.randint(5, 50),color= element[3])
+    g.add_edge(element[0],element[1], weight=element[2],color= element[3])
     
     
 for i,element in nodelist.iterrows():
@@ -69,13 +64,13 @@ for node in list(g.nodes):
             building_nodes.append(dic) 
             i = i+1
             
-            g.add_node( dic['id'],x= dic['x'],y= dic['y'],height =random.randint(5, 20)  ) 
-            g.add_edge(node,dic['id'],weight=random.randint(5, 50),color= 'black')
+            g.add_node( dic['id'],x= dic['x'],y= dic['y'],height = (g.nodes[node]['y']%13+g.nodes[node]['x']%19) ) 
+            g.add_edge(node,dic['id'],weight= (g.nodes[node]['y']+g.nodes[node]['x'])%19,color= 'black')
 
             adj_node = [x for x,y in g.nodes(data=True) if y['x']==g.nodes[node]['x']+100 and y['y'] ==g.nodes[node]['y']]
             for n in adj_node:
                 g.remove_edge(node,n)   
-                g.add_edge(n,dic['id'],weight=random.randint(5, 50),color= 'black')
+                g.add_edge(n,dic['id'],weight=(g.nodes[node]['y']+g.nodes[node]['x'])%29,color= 'black')
     building_iter = building_iter + 1
    
 
@@ -99,7 +94,7 @@ node_positions = {node[0]: (node[1]['x'], node[1]['y']) for node in g.nodes(data
 edge_colors = [e[2]['color'] for e in g.edges(data=True)]  
 labels = nx.get_node_attributes(g,'height')
 
-nx.draw(g, pos=node_positions, edge_color=edge_colors,node_size=10, node_color='red')
+nx.draw(g, pos=node_positions, edge_color=edge_colors,node_size=10, node_color='black')
 nx.draw_networkx_labels(g,pos=node_positions,labels=labels,font_size=12,font_color='blue')
 #nx.draw(g, labels = labels)
 
