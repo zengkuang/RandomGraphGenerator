@@ -12,6 +12,9 @@ import networkx as nx
 import pandas as pd
 import matplotlib.pyplot as plt 
 import matplotlib.patches as patches
+import matplotlib.animation as animation
+
+
 
 
 node_prob = 0.2
@@ -75,20 +78,31 @@ for node in list(g.nodes):
    
 
 
-#g.add_nodes_from(building_nodes)
 
 for build in building_nodes:
-    print(build['id'])
+#    print(build['id'])
 #    g.add_node(build['id'],x= build['x'],y= build['y'] )
     fig.gca().add_patch(patches.Rectangle((build['x']-30,build['y']-80),60,60,edgecolor = 'black',facecolor = 'none'))
 #print(building_nodes)    
 
 
+p = nx.shortest_path(g,source=building_nodes[0]['id'],target=building_nodes[9]['id'])
 
-       
+
+
+shortest_path_list = []
+for i in range(len(p)-1):
+    shortest_path_list.append([p[i],p[i+1]])
+
+
+def path_animation(i):
+    nx.draw_networkx_edges(g, pos=node_positions,edgelist = shortest_path_list[i:i+1], edge_color= 'r')
+
+print(shortest_path_list)    
 #print(nx.shortest_path(g, source='n00', target='n44'))     
         
 node_positions = {node[0]: (node[1]['x'], node[1]['y']) for node in g.nodes(data=True)}
+shortest_node = {}
 #print(dict(list(node_positions.items())[0:5]))
 #edge_colors = [e[2]['attr_dict']['color'] for e in g.edges(data=True)]  
 edge_colors = [e[2]['color'] for e in g.edges(data=True)]  
@@ -97,7 +111,7 @@ labels = nx.get_node_attributes(g,'height')
 nx.draw(g, pos=node_positions, edge_color=edge_colors,node_size=10, node_color='black')
 nx.draw_networkx_labels(g,pos=node_positions,labels=labels,font_size=12,font_color='blue')
 #nx.draw(g, labels = labels)
-
+#nx.draw_networkx_edges(g, pos=node_positions,edgelist = shortest_path_list[0:1], edge_color= 'r')
 
 bbox = {'ec':[1,1,1,0], 'fc':[1,1,1,0]}
 # hack to label edges over line (rather than breaking up line)
@@ -106,3 +120,5 @@ edge_labels = nx.get_edge_attributes(g,'weight')
 nx.draw_networkx_edge_labels(g, pos=node_positions, edge_labels=edge_labels, bbox=bbox, font_size=10)
 plt.axis('square')  
 plt.show()
+anim = animation.FuncAnimation(fig, path_animation, frames=range(len(p)-1), interval=1000)
+#anim = animation.FuncAnimation(fig, path_animation, frames=range(len(p)-1), interval=500, blit=True)
