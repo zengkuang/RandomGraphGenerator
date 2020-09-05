@@ -17,7 +17,7 @@ nodelist = pd.read_csv('random_nodes.csv')
 buildingnode = pd.read_csv('building_nodes.csv')
 
 source_building = 'A'
-destination_building = 'B'
+destination_building = 'G'
 
 
 g = nx.Graph()
